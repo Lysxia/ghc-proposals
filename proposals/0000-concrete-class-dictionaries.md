@@ -623,6 +623,42 @@ like we can do with the first syntax.
        type Elt Blah = Bleh
     ```
 
+## Related work
+
+This proposal is similar to the one in the paper [*Coherent Dictionary
+Applications in Haskell*](https://dl.acm.org/doi/10.1145/3299711.3242752),
+by Thomas Winant and Dominique Devriese, in Haskell Symposium 2018.
+
+We both propose:
+
+1. to expose type class dictionaries (Section 2.1)
+2. to define instances using dictionaries ("dictionary instances", Section 2.3)
+
+However, the paper focuses mainly on a third feature, "coherent dictionary
+applications*, which is not part of this proposal.
+
+The main differences in the two common features are:
+
+1. this proposal adds new syntax for naming the new record constructor;
+   the paper derives the name from the class `MyClass.Dict`;
+2. this proposal ignores superclasses because they are not needed for defining
+   instances; the paper requires the full run-time information carried by class
+   dictionaries, including superclasses, to be able to apply functions to them;
+3. this proposal desugars dictionary instances in terms of the current syntax for
+   instances; the paper uses the dictionary directly, which allows dictionaries
+   to not terminate (it is unclear whether that is an issue, but it's one difference)
+   and if the superclass fields are allowed to be overriden, that will be incoherent.
+
+Items (2) and (3) above point to there being a fundamental difference in need
+between "dictionary instances" and "dictionary applications", which justifies
+our choice of ignoring superclasses. It would in fact be detrimental to the
+former---this proposal---to expose the complete underlying representation of
+dictionaries including superclasses.
+
+Leaving out superclasses will not lock us out of any future
+"dictionary application" proposal: one idea is to build a tuple
+containing our dictionaries, plus the superclass instances.
+
 ## Implementation Plan
 
 No implementation plan at this time.
